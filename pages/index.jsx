@@ -40,6 +40,15 @@ export default function Home() {
         <div className="mt-12 max-w-lg text-sm text-gray-600 italic">
           Born on Solana. No utility. No roadmap. No promises. Just fluff, fun, and feathers.
         </div>
+
+        <div className="mt-8 flex gap-4 text-sm">
+          <a href="https://x.com/peepssolana" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+            Twitter
+          </a>
+          <a href="https://t.me/peepssolana" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+            Telegram
+          </a>
+        </div>
       </main>
     </div>
   );
