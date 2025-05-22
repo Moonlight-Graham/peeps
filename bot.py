@@ -3,12 +3,11 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, Messa
 from solana.rpc.async_api import AsyncClient
 from solders.pubkey import Pubkey
 
-
 # /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "🐣 Welcome, Egghead!\n\n"
-        "You’ve just joined the cutest community in crypto: $Peeps 🐥\n\n"
+        "You’ve just joined the cutest community in crypto: $PEEPS 🐥\n\n"
         "Type /help to crack open some commands."
     )
 
@@ -16,43 +15,46 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "🥚 $Peeps Bot Commands:\n\n"
-        "/start - Welcome message from the coop\n"
-        "/help - You’re lookin’ at it\n"
-        "/price - Market status for $Peeps\n"
-        "/contract - View token address\n"
-        "/website - Visit Peeps homepage\n"
-        "/chirp - Latest tweet from the flock 🐤\n"
-        "/wallet <address> - Check SOL balance of a wallet"
+        "/start – Welcome message from the coop\n"
+        "/help – You’re lookin’ at it\n"
+        "/price – Market status for $Peeps\n"
+        "/contract – View token contract\n"
+        "/website – Visit Peeps homepage\n"
+        "/chirp – Latest tweet from the flock 🐣\n"
+        "/wallet <address> – Check SOL balance of a wallet"
     )
 
 # /price
 async def price(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "📊 $Peeps is still hatching... no live price yet!\n"
-        "But when this chick flies, it’s moonbound. 🚀🌕"
+        "🐥 $Peeps is live on Pump.fun!\n"
+        "Watch the launch here:\n"
+        "https://pump.fun/2faYRSrnN4Gm6orpdKCM8XsQQv3YgeZHTn5H6dknpump\n\n"
+        "🚀 Let’s moon together, Eggheads!"
     )
 
 # /contract
 async def contract(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "📜 Official Solana Contract for $Peeps:\n"
-        "`8DFkuXQWU85VtpVzfw914YTU2ePNchdk9au58gMJb3W2`\n\n"
-        "*Verified and eggcellent.* 🥚✅",
+        "📜 Official Solana Contract for $PEEPS:\n"
+        "`2faYRSrnN4Gm6orpdKCM8XsQQv3YgeZHTn5H6dknpump`\n\n"
+        "*Verified on Pump.fun* ✅",
         parse_mode="Markdown"
     )
 
 # /website
 async def website(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "🌐 Visit our official site:\nhttps://www.peepssolana.com\n\n"
-        "🚧 Built by Eggheads, for Eggheads."
+        "🌐 Visit our official homepage:\n"
+        "https://www.peepssolana.com\n\n"
+        "✨ Built by Eggheads, for Eggheads."
     )
 
 # /chirp
 async def chirp(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "🐥 Latest chirp from the coop:\n\n"
-        "🚀 $Peeps is live on Solana and making waves!\n"
+        "📣 Latest chirp from the coop:\n\n"
+        "🐣 $PEEPS is taking flight with Pump.fun!\n"
         "Join the revolution, Eggheads 🥚\n\n"
         "👉 https://twitter.com/peepssolana"
     )
@@ -70,20 +72,20 @@ async def wallet(update: Update, context: ContextTypes.DEFAULT_TYPE):
             response = await client.get_balance(public_key)
             sol = response.value / 1e9
             await update.message.reply_text(
-                f"📬 Wallet `{address}` connected!\n"
+                f"🔐 Wallet `{address}` connected!\n"
                 f"💰 Balance: {sol:.4f} SOL",
                 parse_mode="Markdown"
             )
     except Exception as e:
         await update.message.reply_text("❌ Invalid address or RPC error. Please try again.")
 
-# Greet new Eggheads
+# Welcome new members
 async def welcome(update: Update, context: ContextTypes.DEFAULT_TYPE):
     for user in update.message.new_chat_members:
         name = user.first_name
         await update.message.reply_text(
-            f"🐣 Welcome to the Coop, {name}!\n"
-            f"You’re officially an Egghead now 💛\n\n"
+            f"👋 Welcome to the Coop, {name}!\n\n"
+            f"You’re officially an Egghead now 💛🥚\n"
             f"Type /help to get started or visit https://www.peepssolana.com"
         )
 
@@ -102,5 +104,5 @@ app.add_handler(CommandHandler("wallet", wallet))
 # Register welcome message
 app.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome))
 
-print("🐥 $Peeps Bot is now running! Cluck cluck.")
+print("🐣 $Peeps Bot is now running! Cluck cluck.")
 app.run_polling()

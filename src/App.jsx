@@ -1,21 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { Connection, PublicKey, SystemProgram, clusterApiUrl } from '@solana/web3.js';
-import { AnchorProvider, Program, web3 } from '@coral-xyz/anchor';
-import idl from './idl.json';
+// Updated App.jsx with social icons for Twitter and Telegram
 
-const network = clusterApiUrl('devnet');
-const programID = new PublicKey('7yJma8WtwCPBkJLcJ3FgxG2Rz1vdM85nfjMS1ufZg97C');
-const opts = { preflightCommitment: 'processed' };
+import React, { useEffect, useState } from 'react';
+import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
+import { FaTwitter, FaTelegramPlane } from 'react-icons/fa';
+
+const tokenMint = new PublicKey('2faYRSrnN4Gm6orpdKCM8XsQQv3YgeZHTn5H6dknpump');
+const connection = new Connection(clusterApiUrl('mainnet-beta'));
 
 const App = () => {
-  const [walletConnected, setWalletConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState(null);
-  const [solInput, setSolInput] = useState('');
+  const [walletConnected, setWalletConnected] = useState(false);
+  const [peepsBalance, setPeepsBalance] = useState('');
   const [solPrice, setSolPrice] = useState(null);
   const [peepsPrice, setPeepsPrice] = useState(null);
-  const [message, setMessage] = useState('');
-  const [solRaised, setSolRaised] = useState(0);
-  const [peepsBalance, setPeepsBalance] = useState('');
 
   const connectWallet = async () => {
     try {
@@ -37,33 +34,6 @@ const App = () => {
     }
   };
 
-  const getProvider = () => {
-    const connection = new Connection(network, opts.preflightCommitment);
-    const provider = new AnchorProvider(connection, window.solana, opts);
-    return provider;
-  };
-
-  const buyPresaleTokens = async () => {
-    const provider = getProvider();
-    const program = new Program(idl, programID, provider);
-
-    try {
-      const state = web3.Keypair.generate();
-      const solAmount = parseFloat(solInput) * web3.LAMPORTS_PER_SOL;
-
-      const tx = await program.methods.buy(new web3.BN(solAmount)).accounts({
-        state: state.publicKey,
-        buyer: provider.wallet.publicKey,
-        systemProgram: SystemProgram.programId,
-      }).rpc();
-
-      setMessage(`Transaction successful! Signature: ${tx}`);
-    } catch (err) {
-      console.error('Transaction failed', err);
-      setMessage('Transaction failed. See console for details.');
-    }
-  };
-
   const fetchPrices = async () => {
     try {
       const solRes = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd');
@@ -75,31 +45,16 @@ const App = () => {
     }
   };
 
-  const fetchVaultBalance = async () => {
-    try {
-      const connection = new Connection(clusterApiUrl('devnet'));
-      const vaultAddress = new PublicKey('8TsbiLU8QxWJwvAzLPz7rJsm38EfqkNcsxnhqDXVreKT');
-      const balance = await connection.getBalance(vaultAddress);
-      setSolRaised(balance / web3.LAMPORTS_PER_SOL);
-    } catch (err) {
-      console.error('Error fetching vault balance', err);
-    }
-  };
-
   const fetchPeepsBalance = async () => {
     try {
-      const connection = new Connection(clusterApiUrl('devnet'));
       const TOKEN_ACCOUNT = await connection.getParsedTokenAccountsByOwner(
         new PublicKey(walletAddress),
-        {
-          mint: new PublicKey('8DFxuKQWU8SVtpVZfw914YTU2ePNchdk9au58gMJb3W2'),
-        }
+        { mint: tokenMint }
       );
-
       const balance = TOKEN_ACCOUNT.value[0]?.account.data.parsed.info.tokenAmount.uiAmountString || '0';
       setPeepsBalance(balance);
     } catch (err) {
-      console.error('Error fetching Peeps token balance', err);
+      console.error('Error fetching $PEEPS balance', err);
     }
   };
 
@@ -109,7 +64,6 @@ const App = () => {
       setWalletAddress(window.solana.publicKey?.toString() || null);
     }
     fetchPrices();
-    fetchVaultBalance();
   }, []);
 
   useEffect(() => {
@@ -118,27 +72,40 @@ const App = () => {
     }
   }, [walletConnected, walletAddress]);
 
-  const convertedAmount = solPrice && peepsPrice && solInput
-    ? ((solInput * solPrice + 500000 * peepsPrice) / (1 * peepsPrice)).toFixed(0)
-    : '';
-
   return (
     <div style={{ fontFamily: 'Arial', textAlign: 'center', padding: '1rem', background: '#fff7d6', minHeight: '100vh' }}>
-      <p><strong>The Official Peeps on Solana ($PEEPS) dApp</strong></p>
+      <p><strong>The Official $PEEPS Dashboard</strong></p>
       <img src="/chick-icon.png" alt="$PEEPS Chick Icon" style={{ width: '120px', borderRadius: '50%' }} />
 
-      <h1>$PEEPS Presale</h1>
+      <h1>$PEEPS</h1>
+      <h2 style={{ fontWeight: 'normal' }}>The Cutest Chick in Crypto</h2>
+      <p style={{ maxWidth: '600px', margin: '0 auto', fontSize: '0.95rem' }}>
+        $PEEPS is a fun and vibrant meme coin born to entertain, hatch new eggheads, and bring pure joy to Solana. From the coop to the moon, Peeps is on a mission to rule the meme chain.
+      </p>
 
-      <button onClick={walletConnected ? disconnectWallet : connectWallet} style={{
-        padding: '0.6rem 1.2rem',
-        background: '#389AD7',
-        border: 'none',
-        borderRadius: '8px',
-        fontSize: '16px',
-        fontWeight: 'bold',
-        color: '#ECFDFE',
-        cursor: 'pointer'
-      }}>
+      <div style={{ marginTop: '1rem' }}>
+        <a href="https://x.com/peepssolana" target="_blank" rel="noopener noreferrer" style={{ margin: '0 10px', fontSize: '1.8rem', color: '#1DA1F2' }}>
+          <FaTwitter />
+        </a>
+        <a href="https://t.me/peepssolana" target="_blank" rel="noopener noreferrer" style={{ margin: '0 10px', fontSize: '1.8rem', color: '#0088cc' }}>
+          <FaTelegramPlane />
+        </a>
+      </div>
+
+      <button
+        onClick={walletConnected ? disconnectWallet : connectWallet}
+        style={{
+          padding: '0.6rem 1.2rem',
+          background: '#38A9D7',
+          border: 'none',
+          borderRadius: '8px',
+          fontSize: '16px',
+          fontWeight: 'bold',
+          color: '#FCFDFE',
+          cursor: 'pointer',
+          marginTop: '1rem'
+        }}
+      >
         {walletConnected ? 'Disconnect Wallet' : 'Connect Phantom Wallet'}
       </button>
 
@@ -150,52 +117,55 @@ const App = () => {
       )}
 
       <div style={{ marginTop: '2rem' }}>
-        <h3>Buy $PEEPS Tokens on Presale</h3>
-        <input
-          type="number"
-          value={solInput}
-          onChange={(e) => setSolInput(e.target.value)}
-          placeholder="Enter amount in SOL"
-          style={{ padding: '0.5rem', width: '200px', borderRadius: '6px' }}
-        />
-        <br /><br />
-        <button
-          onClick={buyPresaleTokens}
-          style={{
-            padding: '0.6rem 1.2rem',
-            background: '#ffd91a',
-            border: 'none',
-            borderRadius: '8px',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            fontSize: '15px',
-            borderColor: '#f0823F',
-            border: '2px'
-          }}>
-          Buy $PEEPS Presale
-        </button>
-        <p style={{ color: 'green', marginTop: '1rem' }}>{message}</p>
-      </div>
-
-      <div style={{ marginTop: '2rem' }}>
         <h3>Live Prices</h3>
         <p>1 SOL = ${solPrice || '...'} USD</p>
-        <p>1 $PEEPS = ${peepsPrice || '...'} USD</p>
-        {convertedAmount && solInput && (
-          <p>{solInput} SOL ≈ {convertedAmount} $PEEPS @ $1 USD</p>
-        )}
       </div>
 
-      <div style={{ marginTop: '2rem', background: '#fff0b3', padding: '1rem', borderRadius: '12px', maxWidth: '400px', marginInline: 'auto' }}>
-        <h3>Presale Progress</h3>
-        <p><strong>{solRaised.toFixed(2)}</strong> / 100 SOL Raised</p>
-        <div style={{ background: '#eee', height: '10px', borderRadius: '6px', overflow: 'hidden' }}>
-          <div style={{
-            height: '100%',
-            width: `${Math.min((solRaised / 100) * 100, 100)}%`,
-            backgroundColor: '#ffd91a'
-          }} />
-        </div>
+      <a
+        href="https://pump.fun/2faYRSrnN4Gm6orpdKCM8XsQQv3YgeZHTn5H6dknpump"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: 'inline-block',
+          marginTop: '1.5rem',
+          padding: '0.6rem 1.5rem',
+          backgroundColor: '#facc15',
+          color: '#000',
+          fontWeight: 'bold',
+          borderRadius: '8px',
+          textDecoration: 'none'
+        }}
+      >
+        Trade on Pump.fun
+      </a>
+<div style={{ marginTop: '4rem', padding: '2rem', backgroundColor: '#fff7e6', borderRadius: '12px', maxWidth: '700px', marginInline: 'auto', textAlign: 'center', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}>
+  <h2 style={{ fontSize: '2rem', marginBottom: '1rem', color: '#333' }}>🡙 $PEEPS Merch Store</h2>
+  <p style={{ fontSize: '1.1rem', marginBottom: '2rem', color: '#555' }}>
+    Exclusive $PEEPS hats and t-shirts are on the way.
+    <br />
+    <strong>Coming soon at $70k market cap!</strong>
+  </p>
+  <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
+    <div style={{ width: '140px', textAlign: 'center' }}>
+      <img src="/peeps-hat.jpg" alt="$PEEPS Hat" style={{ width: '100%', borderRadius: '8px' }} />
+      <p style={{ marginTop: '0.5rem', fontWeight: 'bold', color: '#222' }}>$PEEPS Hat</p>
+    </div>
+    <div style={{ width: '140px', textAlign: 'center' }}>
+      <img src="/peeps-shirt.png" alt="$PEEPS T-Shirt" style={{ width: '100%', borderRadius: '8px' }} />
+      <p style={{ marginTop: '0.5rem', fontWeight: 'bold', color: '#222' }}>$PEEPS T-Shirt</p>
+    </div>
+  </div>
+</div>
+      <div style={{ marginTop: '2rem', maxWidth: '700px', marginInline: 'auto' }}>
+        <h3>$PEEPS Live Chart</h3>
+        <iframe
+          src="https://birdeye.so/token/2faYRSrnN4Gm6orpdKCM8XsQQv3YgeZHTn5H6dknpump?chain=solana"
+          width="100%"
+          height="400"
+          style={{ border: 'none', borderRadius: '12px' }}
+          title="$PEEPS Chart"
+          allowFullScreen
+        />
       </div>
 
       <footer style={{ marginTop: '3rem', fontSize: '0.85rem', color: '#333', paddingTop: '2rem', borderTop: '1px solid #ccc' }}>

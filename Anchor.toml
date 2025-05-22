@@ -1,0 +1,8 @@
+[programs.mainnet]
+peeps_presale = "REPLACE_WITH_MAINNET_PROGRAM_ID"
+
+[provider]
+cluster = "https://api.mainnet-beta.solana.com"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
