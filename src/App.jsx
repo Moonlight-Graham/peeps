@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 import { FaTwitter, FaTelegramPlane } from 'react-icons/fa';
 
-const tokenMint = new PublicKey('2faYRSrnN4Gm6orpdKCM8XsQQv3YgeZHTn5H6dknpump');
+const tokenMint = new PublicKey('');
 const connection = new Connection(clusterApiUrl('mainnet-beta'));
 
 const App = () => {
@@ -87,9 +87,6 @@ const App = () => {
         <a href="https://x.com/peepssolana" target="_blank" rel="noopener noreferrer" style={{ margin: '0 10px', fontSize: '1.8rem', color: '#1DA1F2' }}>
           <FaTwitter />
         </a>
-        <a href="https://t.me/peepssolana" target="_blank" rel="noopener noreferrer" style={{ margin: '0 10px', fontSize: '1.8rem', color: '#0088cc' }}>
-          <FaTelegramPlane />
-        </a>
       </div>
 
       <button
@@ -122,7 +119,7 @@ const App = () => {
       </div>
 
       <a
-        href="https://pump.fun/2faYRSrnN4Gm6orpdKCM8XsQQv3YgeZHTn5H6dknpump"
+        href="https://"
         target="_blank"
         rel="noopener noreferrer"
         style={{
@@ -139,11 +136,11 @@ const App = () => {
         Trade on Pump.fun
       </a>
 <div style={{ marginTop: '4rem', padding: '2rem', backgroundColor: '#fff7e6', borderRadius: '12px', maxWidth: '700px', marginInline: 'auto', textAlign: 'center', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}>
-  <h2 style={{ fontSize: '2rem', marginBottom: '1rem', color: '#333' }}>🡙 $PEEPS Merch Store</h2>
+  <h2 style={{ fontSize: '2rem', marginBottom: '1rem', color: '#333' }}>🡙 $PEEPS Merch Rewards Store</h2>
   <p style={{ fontSize: '1.1rem', marginBottom: '2rem', color: '#555' }}>
     Exclusive $PEEPS hats and t-shirts are on the way.
     <br />
-    <strong>Coming soon at $70k market cap!</strong>
+    <strong>Coming soon at $100k market cap!</strong>
   </p>
   <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
     <div style={{ width: '140px', textAlign: 'center' }}>
@@ -151,7 +148,7 @@ const App = () => {
       <p style={{ marginTop: '0.5rem', fontWeight: 'bold', color: '#222' }}>$PEEPS Hat</p>
     </div>
     <div style={{ width: '140px', textAlign: 'center' }}>
-      <img src="/peeps-shirt.png" alt="$PEEPS T-Shirt" style={{ width: '100%', borderRadius: '8px' }} />
+      <img src="/peeps-shirt.jpg" alt="$PEEPS T-Shirt" style={{ width: '100%', borderRadius: '8px' }} />
       <p style={{ marginTop: '0.5rem', fontWeight: 'bold', color: '#222' }}>$PEEPS T-Shirt</p>
     </div>
   </div>
@@ -159,7 +156,7 @@ const App = () => {
       <div style={{ marginTop: '2rem', maxWidth: '700px', marginInline: 'auto' }}>
         <h3>$PEEPS Live Chart</h3>
         <iframe
-          src="https://birdeye.so/token/2faYRSrnN4Gm6orpdKCM8XsQQv3YgeZHTn5H6dknpump?chain=solana"
+          src=
           width="100%"
           height="400"
           style={{ border: 'none', borderRadius: '12px' }}
